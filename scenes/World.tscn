@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scenes/characters/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/sprites/background-day.png" type="Texture" id=2]
+[ext_resource path="res://scenes/World.gd" type="Script" id=3]
+[ext_resource path="res://scenes/environments/Ground.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/environments/WallSpawner.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/ui/HUD.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/ui/Menu.tscn" type="PackedScene" id=7]
+
+[node name="World" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Menu" parent="." instance=ExtResource( 7 )]
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 50, 256 )
+
+[node name="WallSpawner" parent="." instance=ExtResource( 5 )]
+position = Vector2( 320, 0 )
+
+[node name="Ground" parent="." instance=ExtResource( 4 )]
+
+[node name="HUD" parent="." instance=ExtResource( 6 )]
+
+[connection signal="start_game" from="Menu" to="." method="_on_Menu_start_game"]
+[connection signal="game_over" from="Player" to="." method="_on_Player_game_over"]
+[connection signal="wall_created" from="WallSpawner" to="." method="_on_wall_created"]
+[connection signal="body_entered" from="Ground/Area2D" to="." method="_on_ground_body_entered"]
+
+[editable path="Ground"]

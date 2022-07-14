@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scenes/environments/Pipe.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/environments/Wall.gd" type="Script" id=2]
+[ext_resource path="res://assets/audio/point.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/audio/hit.wav" type="AudioStream" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 12, 370 )
+
+[node name="Wall" type="Node2D" groups=["walls"]]
+position = Vector2( 0, 256 )
+script = ExtResource( 2 )
+
+[node name="BottomPipe" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, 50 )
+
+[node name="TopPipe" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, -50 )
+rotation = 3.14159
+
+[node name="ScoreArea" type="Area2D" parent="."]
+
+[node name="ScoreWall" type="CollisionShape2D" parent="ScoreArea"]
+position = Vector2( 12, 0 )
+shape = SubResource( 1 )
+
+[node name="ScoreAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+
+[node name="HitAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[connection signal="body_entered" from="BottomPipe" to="." method="_on_hit_the_pipe"]
+[connection signal="body_entered" from="TopPipe" to="." method="_on_hit_the_pipe"]
+[connection signal="body_exited" from="ScoreArea" to="." method="_on_ScoreArea_body_exited"]
